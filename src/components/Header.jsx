@@ -2,11 +2,21 @@ import { NavLink } from "react-router"
 import Login from "../pages/Login"
 import Register from '../pages/Register'
 import Profile from '../pages/Profile'
+import { signOut } from "firebase/auth"
+import { auth } from "../../firebase"
+import { useNavigate } from "react-router"
 
 function Header() {
 
+    let navigate = useNavigate()
+
     let linkStyle = {
         fontWeight: "bold"
+    }
+
+    async function handleSignOut() {
+        await signOut(auth)
+        navigate("/")
     }
 
     return (
@@ -21,6 +31,9 @@ function Header() {
                 </li>
                 <li style={location.pathname == "/profile" ? linkStyle : null}>
                     <NavLink to="/profile" element={<Profile />}>Profile</NavLink>
+                </li>
+                <li>
+                    <button onClick={handleSignOut} className="btn btn-primary btn-sm">Logout</button>
                 </li>
             </ul>
         </>

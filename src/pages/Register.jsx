@@ -1,18 +1,34 @@
 import Header from "../components/Header"
 import { auth } from "../../firebase"
+import { useNavigate } from "react-router"
+import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useState } from "react"
 
 function Register() {
     let [ email, setEmail ] = useState("")
     let [ password, setPassword ] = useState("")
+    let [ message, setMessage ] = useState("")
 
-    function handleRegister() {
-        console.log(email, password)
+    let navigate = useNavigate()
+
+    async function handleRegister() {
+        try {
+            await createUserWithEmailAndPassword(auth, email, password)
+            navigate("/")
+        } catch (error) {
+            console.log(error)
+            setMessage("Error in registering")
+        }
     }
+
+    // console.log(auth.currentUser.email)
 
     return (
         <>
             <Header />
+            <div>
+                <h3>{message}</h3>
+            </div>
             <div style={{
                 width: "400px",
                 margin: "50px auto 0px auto"
